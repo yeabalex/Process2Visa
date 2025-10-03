@@ -1,0 +1,112 @@
+import mongoose from "mongoose";
+
+
+const userSchema = new mongoose.Schema({
+  telegramChatId: { 
+    type: String, 
+    required: true, 
+    unique: true
+  },
+  fullName: { type: String, trim: true },
+  age: { type: Number, min: 0 },
+  phoneNumber: String,
+  email: { type: String, lowercase: true, trim: true },
+  nationality: String,
+  preferredCountry: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Country",
+  },
+  educationLevel: {
+    type: String,
+    enum: ["High School", "Diploma", "Bachelor", "Master", "PhD", "Other"]
+  },
+}, { timestamps: true });
+
+const itemProgressSchema = new mongoose.Schema(
+  {
+    completed: { type: Boolean, default: false },
+    completedAt: { type: Date, default: null },
+  },
+  { _id: false }
+);
+
+const moduleProgressSchema = new mongoose.Schema(
+  {
+    completed: { type: Boolean, default: false },
+    service: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Service",
+      required: true,
+    },
+    progress: {
+      default: {},
+    },
+  },
+  { _id: false }
+      },
+const courseProgressSchema = new mongoose.Schema(
+    },
+  },
+  { timestamps: true }
+);
+
+    timeSpent: { type: Number, default: 0 }, // in seconds
+  {
+    modules: {
+    description: String,
+      of: moduleProgressSchema,
+      default: {},
+    },
+  },
+  },
+  { _id: false }
+);
+
+  {
+  {
+    id: { type: String, required: true },
+    title: { type: String, required: true },
+      ref: "Service",
+      required: true,
+    },
+      required: true,
+    },
+    completed: { type: Boolean, default: false },
+  { timestamps: true }
+    description: String,
+const contentSchema = new mongoose.Schema(
+  },
+  { _id: false }
+);
+
+    blocks: { type: Array, default: [] },
+  {
+    id: { type: String, required: true },
+    title: { type: String, required: true },
+    description: String,
+  { _id: false }
+);
+  },
+  { _id: false }
+);
+
+    title: { type: String, required: true },
+  {
+      type: String,
+      enum: ["video", "reading", "assignment", "quiz", "lab"],
+    service: {
+    },
+    completed: { type: Boolean, default: false },
+    duration: String,
+    description: String,
+    content: contentSchema,
+  },
+  },
+  { timestamps: true }
+);
+
+  {
+    id: { type: String, required: true },
+    title: { type: String, required: true },
+    description: String,
+    items: { type: [courseItemSchema], default: [] },
