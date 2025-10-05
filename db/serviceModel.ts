@@ -21,6 +21,11 @@ const serviceSchema = new mongoose.Schema(
       type: Number,
       min: 0,
     },
+    currency: {
+      type: String,
+      default: "ETB",
+      trim: true,
+    },
     image: {
       type: String,
       trim: true, // URL or path to the background image

@@ -179,6 +179,15 @@ export function ServicesManagement() {
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
+                <Label htmlFor="displayName">Display Name</Label>
+                <Input
+                  id="displayName"
+                  value={formData.displayName}
+                  onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
+                  placeholder="e.g., Premium Plan"
+                />
+              </div>
+              <div className="grid gap-2">
                 <Label htmlFor="name">Service Name</Label>
                 <Input
                   id="name"
@@ -358,6 +367,15 @@ export function ServicesManagement() {
             <DialogDescription>Update the service details</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="edit-displayName">Display Name</Label>
+              <Input
+                id="edit-displayName"
+                value={formData.displayName}
+                onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
+                placeholder="e.g., Premium Plan"
+              />
+            </div>
             <div className="grid gap-2">
               <Label htmlFor="edit-name">Service Name</Label>
               <Input
