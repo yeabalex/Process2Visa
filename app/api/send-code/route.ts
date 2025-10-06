@@ -44,38 +44,45 @@ export async function POST(req: NextRequest) {
     
     const verificationCode = generateSixDigitCode();
     
-    const phoneChat = await User.findOne({ phoneNumber: normalizedPhone });
-    if (!phoneChat) {
-      return NextResponse.json(
-        { success: false, message: 'Phone number not registered with any chatId' },
-        { status: 404 }
-      );
+    // Check if phone number exists in User model
+    const existingUser = await User.findOne({ phoneNumber: normalizedPhone });
+    
+    if (existingUser) {
+      // User exists, proceed with normal OTP flow
+      const { telegramChatId } = existingUser;
+      console.log(telegramChatId);
+      
+      // Clear previous OTPs
+      await Otp.deleteMany({ chatId: telegramChatId });
+      
+      // Create new OTP
+      await Otp.create({
+        chatId: telegramChatId,
+        otp: verificationCode,
+        expiresAt: new Date(Date.now() + 10 * 60 * 1000),
+      });
+      
+      // Send via Telegram
+      const bot = new Telegraf(process.env.BOT_TOKEN!);
+      const message = `🔐 Your verification code is: ${verificationCode}\n\nThis code will expire in 10 minutes. Please don't share it with anyone.`;
+      await bot.telegram.sendMessage(telegramChatId, message, { parse_mode: 'Markdown' });
+      
+      // Return success with redirect URL for existing user
+      return NextResponse.json({
+        success: true,
+        message: 'Verification code sent successfully',
+        redirectUrl: `/otp?chatId=${telegramChatId}`
+      });
+    } else {
+      // Phone number not registered, this is a new user
+      // We need to get the chat ID from the request or generate a temporary one
+      // For now, we'll redirect to registration with a temporary flow
+      return NextResponse.json({
+        success: true,
+        message: 'Phone number not registered',
+        redirectUrl: `/register?phoneNumber=${encodeURIComponent(normalizedPhone)}`
+      });
     }
-    
-    const { telegramChatId } = phoneChat;
-    console.log(telegramChatId);
-    
-    // Clear previous OTPs
-    await Otp.deleteMany({ chatId: telegramChatId });
-    
-    // Create new OTP
-    await Otp.create({
-      chatId: telegramChatId,
-      otp: verificationCode,
-      expiresAt: new Date(Date.now() + 10 * 60 * 1000),
-    });
-    
-    // Send via Telegram
-    const bot = new Telegraf(process.env.BOT_TOKEN!);
-    const message = `🔐 Your verification code is: ${verificationCode}\n\nThis code will expire in 10 minutes. Please don't share it with anyone.`;
-    await bot.telegram.sendMessage(telegramChatId, message, { parse_mode: 'Markdown' });
-    
-    // ✅ Return success with redirect URL instead of redirecting
-    return NextResponse.json({
-      success: true,
-      message: 'Verification code sent successfully',
-      redirectUrl: `/otp?chatId=${telegramChatId}`
-    });
     
   } catch (error) {
     console.error('Error sending Telegram message:', error);
