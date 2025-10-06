@@ -11,12 +11,11 @@ export async function POST(req: NextRequest) {
       age,
       phoneNumber,
       nationality,
-      preferredCountry,
       educationLevel
     } = body;
 
     // Validate required fields (telegramChatId is optional for web registrations)
-    if (!fullName || !age || !phoneNumber || !nationality || !preferredCountry || !educationLevel) {
+    if (!fullName || !age || !phoneNumber || !nationality || !educationLevel) {
       return NextResponse.json({ error: 'All fields are required' }, { status: 400 });
     }
 
@@ -36,7 +35,6 @@ export async function POST(req: NextRequest) {
       age: parseInt(age),
       phoneNumber: phoneNumber.trim(),
       nationality: nationality.trim(),
-      preferredCountry: preferredCountry, // Now it's a string "Ethiopia" instead of ObjectId
       educationLevel
     });
 

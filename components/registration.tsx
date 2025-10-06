@@ -15,8 +15,7 @@ export default function RegistrationPage() {
     fullName: "",
     age: "",
     phoneNumber: "",
-    nationality: "",
-    preferredCountry: "Ethiopia",
+    nationality: "Ethiopia",
     educationLevel: "",
     telegramChatId: searchParams.get("chat_id") || ""
   })
@@ -31,7 +30,7 @@ export default function RegistrationPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (!formData.fullName || !formData.age || !formData.phoneNumber || !formData.nationality || !formData.preferredCountry || !formData.educationLevel) {
+    if (!formData.fullName || !formData.age || !formData.phoneNumber || !formData.nationality || !formData.educationLevel) {
       alert("Please fill in all fields")
       return
     }
@@ -113,22 +112,11 @@ export default function RegistrationPage() {
 
             <div className="space-y-2">
               <Label htmlFor="nationality">Nationality *</Label>
-              <Input
-                id="nationality"
-                type="text"
-                placeholder="Enter your nationality"
-                value={formData.nationality}
-                onChange={(e) => handleInputChange("nationality", e.target.value)}
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="preferredCountry">Preferred Country *</Label>
               <div className="p-3 bg-gray-50 border border-gray-200 rounded-md">
                 <span className="text-gray-700">🇪🇹 Ethiopia</span>
-                <p className="text-xs text-gray-500 mt-1">Currently only Ethiopia is available</p>
+                <p className="text-xs text-gray-500 mt-1">Ethiopian nationality</p>
               </div>
+              <input type="hidden" name="nationality" value="Ethiopia" />
             </div>
 
             <div className="space-y-2">

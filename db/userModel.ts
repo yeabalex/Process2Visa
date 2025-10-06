@@ -12,10 +12,6 @@ const userSchema = new mongoose.Schema({
   phoneNumber: String,
   email: { type: String, lowercase: true, trim: true },
   nationality: String,
-  preferredCountry: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Country",
-  },
   educationLevel: {
     type: String,
     enum: ["High School", "Diploma", "Bachelor", "Master", "PhD", "Other"]

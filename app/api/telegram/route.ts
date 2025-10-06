@@ -74,8 +74,7 @@ Click Continue to proceed:`;
         });
       } else {
         // New user - send registration link
-        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://your-domain.com';
-        const registrationUrl = `${baseUrl}/register?chat_id=${chatId}&source=telegram`;
+        const registrationUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'https://your-domain.com'}/register?chat_id=${chatId}&source=telegram`;
 
         const responseText = `🎉 Welcome ${firstName}!
 
